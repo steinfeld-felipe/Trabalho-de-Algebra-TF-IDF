@@ -1,0 +1,100 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsmath}
+
+\title{Relatório Trabalho de Álgebra}
+\author{Felipe Steinfeld}
+\date{November 2025}
+
+\begin{document}
+
+\maketitle
+
+ \section{Introdução}
+
+O trabalho é um sistema de recomendação de pratos de comida da culinária brasileira, apresentando os similares utilizando o sistema tf-idf. O usuário escolhe um prato e recebe os três pratos mais similares ao escolhido.
+
+A análise tf-idf é feita através da vetorização dos ingredientes dos pratos, assim é possível fazer uma análise matemática e descobrir prato mais semelhantes ao escolhido pelo usuário.
+
+\section{Tema}
+
+O sistema foi criado para mostrar a utilidade do sistema TF-IDF, e nesse caso como pode ajudar o cliente a encontrar pratos semelhantes ao desejado, focado em pratos da culinária brasileira.
+
+\subsection{Projeto}
+No projeto o usuário vai receber uma lista de pratos típicos brasileiros, cada um com um respectivo número. O usuário deve escolher um dos pratos digitando seu número no console, assim pode ver os 3 pratos mais semelhantes. Após o resultado, o usuário pode escolher a opção de ver uma explicação matemática do que está acontecendo, então deve-se digitar 'Explicação' no console, ou apenas clicar na tecla 'enter' e assim voltando ao menu de opções. De volta ao menu pode-se escolher outro prato ou digitar 'sair' para finalizar o programa.
+
+O resultado de cada pesquisa dá ao usuário os 3 pratos mais semelhantes com os valores do cosseno (similaridade) e o valor do ãngulo calculado.   
+Cada resultado de similaridade entre os pratos é classificado de acordo com o valor do cosseno do ângulo entre seus vetores TF-IDF, seguindo os seguintes intervalos:
+
+\begin{itemize}
+    \item Similaridade $\leq 0,33$: \textbf{Baixa}
+    \item $0,33 < \text{Similaridade} \leq 0,66$: \textbf{Média}
+    \item Similaridade $> 0,66$: \textbf{Alta}
+\end{itemize}
+
+
+ \section{DataSet}
+ O dataset foi gerado pelo chatgpt. Contém 14 pratos de comida e seus respectivos ingredientes. São duas colunas, 'Prato' e 'Ingredientes', e 14 linhas com dados preenchidos.
+ 
+ Os nomes em 'negrito' pertencem a coluna 'Prato', e os itens que seguem cada tópico fazem parte da coluna 'Ingredientes'.
+ \begin{enumerate}
+    \item \textbf{Feijoada}: feijão preto, carne seca, costelinha, linguiça, arroz, farofa, couve.
+    \item \textbf{Bife a cavalo}: arroz, feijão, bife, ovo, batata frita, salada.
+    \item \textbf{Strogonoff de frango}: frango, creme de leite, ketchup, batata palha, arroz.
+    \item \textbf{Lasanha à bolonhesa}: massa, carne moída, molho de tomate, queijo, presunto.
+    \item \textbf{Moqueca de peixe}: peixe, leite de coco, pimentão, tomate, coentro, cebola.
+    \item \textbf{Escondidinho de carne seca}: carne seca, mandioca, queijo, manteiga.
+    \item \textbf{Feijão tropeiro}: feijão, farinha de mandioca, linguiça, torresmo, ovo.
+    \item \textbf{Galinhada}: arroz, frango, açafrão, cenoura, pimentão, alho.
+    \item \textbf{Bobó de camarão}: camarão, mandioca, leite de coco, azeite de dendê, cebola, coentro.
+    \item \textbf{Carne de panela com batata}: carne, batata, tomate, cebola, alho.
+    \item \textbf{Macarronada com almôndegas}: macarrão, almôndegas, molho de tomate, queijo.
+    \item \textbf{Peixe frito com arroz e salada}: peixe, arroz, salada, tomate, alface, limão.
+    \item \textbf{Virado à paulista}: arroz, tutu de feijão, bisteca, ovo, banana frita.
+    \item \textbf{Picadinho de carne}: carne, cebola, molho de soja, alho, arroz, farofa.
+\end{enumerate}
+ 
+\section{Metodologia}
+
+O sistema foi feito através da linguagem de programação \textbf{Python} com implementação do sistema TF-IDF e as bibliotecas: Pandas, Scikit-learn, Numpy.
+
+\section{Importância e Cálculo do TF-IDF}
+
+O modelo TF-IDF (\textit{Term Frequency – Inverse Document Frequency}) é uma técnica amplamente utilizada em tarefas de mineração de texto e sistemas de recomendação baseados em conteúdo. 
+No contexto deste trabalho, o TF-IDF é fundamental para representar os ingredientes de cada prato em formato numérico, permitindo medir a similaridade entre receitas com base na presença e relevância dos ingredientes.
+
+\subsection{Importância do TF-IDF neste trabalho}
+
+Cada prato é descrito por um conjunto de ingredientes, e diferentes receitas podem compartilhar alguns desses termos. 
+O modelo TF-IDF permite quantificar a importância de cada ingrediente dentro de um prato, levando em consideração tanto sua frequência local (no prato) quanto sua raridade global (em todos os pratos do conjunto de dados).
+
+Dessa forma, ingredientes muito comuns — como ``arroz'' ou ``feijão'' — recebem um peso menor, enquanto ingredientes mais específicos, como ``azeite de dendê'' ou ``carne seca'', têm peso maior. 
+Essa ponderação é essencial para o cálculo da similaridade, pois faz com que os pratos sejam comparados de maneira mais informativa, destacando as características que realmente os diferenciam.
+
+
+\subsection{Relação com a Similaridade de Cosseno}
+
+Após o cálculo do TF-IDF, cada prato é representado como um vetor numérico. 
+A similaridade entre dois pratos é determinada pelo \textbf{cosseno do ângulo} entre esses vetores, conforme a Equação:
+
+\begin{equation}
+\cos(\theta) = \frac{A \cdot B}{\|A\| \|B\|}
+\end{equation}
+
+onde \( A \cdot B \) representa o produto escalar entre os vetores dos pratos, e \( \|A\| \) e \( \|B\| \) são suas normas. 
+O resultado varia de 0 a 1, indicando o grau de similaridade entre os pratos:
+\begin{itemize}
+    \item Valores próximos de 1 indicam alta similaridade (ângulos pequenosn, mais perto de 0º);
+    \item Valores próximos de 0 indicam baixa similaridade (ângulos grandes, mais perto de 90º).
+\end{itemize}
+
+Dessa forma, o TF-IDF combinado com a similaridade de cosseno permite recomendar pratos com ingredientes mais semelhantes, reproduzindo uma lógica de sugestão natural em um restaurante de comida caseira.
+
+\section{Conclusão}
+
+A partir desse trabalho é possível concluir que o modelo TF-IDF é importante e necessário no desenvolvimento de sistemas de recomendação.
+
+
+
+ 
+\end{document}
